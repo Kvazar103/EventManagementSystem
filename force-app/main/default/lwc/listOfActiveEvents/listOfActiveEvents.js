@@ -29,6 +29,17 @@ const columns = [
             variant: 'Brand'
         }
     },
+    {
+        type: "button", label: 'See Details', typeAttributes: {
+            name: 'See_Details',
+            title: 'See Details',
+            disabled: false,
+            value: 'details',
+            iconPosition: 'left',
+            iconName: 'utility:new',
+            variant: 'Brand'
+        }
+    },
 ];
 
 export default class ListOfActiveEvents extends NavigationMixin(LightningElement) {
@@ -54,17 +65,22 @@ export default class ListOfActiveEvents extends NavigationMixin(LightningElement
         }
     }
 
-    addParticipant(event) {
-        this.isModalOpen = true;
-        this.selectedEvent = event.detail.row.Id;
-    }
-
     closeModal() {
         this.isModalOpen = false;
     }
 
     handleChange(event) {
         this.participantRecord[event.target.name] = event.target.value;
+    }
+
+    callRowAction(event){
+        const actionName = event.detail.action.name;
+        if(actionName=='Add_Participant'){
+            this.isModalOpen = true;
+            this.selectedEvent = event.detail.row.Id;
+        }else if(actionName=='See_Details'){
+            window.open("https://playful-narwhal-5w7r6r-dev-ed--c.trailblaze.vf.force.com/apex/EventDetailPage?id="+event.detail.row.Id);
+        }
     }
 
     createParticipant() {
