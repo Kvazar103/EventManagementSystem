@@ -1,0 +1,38 @@
+td[data-label="Event Name"] {
+    background-color:#39c9e9;
+}
+
+td[data-label="Start Date"] {
+    background-color:darkgoldenrod;
+}
+
+td[data-label="Number of Participants"] {
+    background-color:#39c9e9;
+}
+
+td[data-label="Add Participant"] {
+    background-color:darkgoldenrod;
+}
+
+td[data-label="See Details"] {
+    background-color:#39c9e9;
+}
+
+
+
+.tableCss table>thead .slds-th__action{
+	background-color:mediumorchid;
+} 
+
+.tableCss table>thead .slds-th__action:focus, .tableCss table> .slds-th__action:hover, .tableCss table>.slds-is-resizable .slds-th__action:focus, .tableCss table> .slds-is-resizable .tableCss table>.slds-th__action:focus:hover{
+	background-color:mediumorchid;
+}
+
+
+
+
+
+
+
+
+

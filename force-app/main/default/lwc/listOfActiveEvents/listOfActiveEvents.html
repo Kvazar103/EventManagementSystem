@@ -1,6 +1,7 @@
 <template>
-  <div style="height: auto; width: 900px">
-      <template if:true={data}>
+  <div style="height: 100vh; width: 98vw;">
+    <lightning-card  class="tableCss" title="Event Management Home Page" icon-name="standard:event">
+      <template  if:true={data}>
           <lightning-datatable
               key-field="id"
               data={data}
@@ -42,5 +43,6 @@
               <div class="slds-backdrop slds-backdrop_open"></div>
           </template>
       </template>
+    </lightning-card>
   </div>
 </template>

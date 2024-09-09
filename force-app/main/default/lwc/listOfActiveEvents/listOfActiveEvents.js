@@ -4,12 +4,21 @@ import { NavigationMixin } from "lightning/navigation";
 import { createRecord } from 'lightning/uiRecordApi';
 import getAllEvents from '@salesforce/apex/EventController.getAllEvents';
 
+import dt_colors from '@salesforce/resourceUrl/datatablecss';
+import {loadStyle} from 'lightning/platformResourceLoader';
+
 import PARTICIPANT_OBJECT from '@salesforce/schema/Participant__c';
 import PARTICIPANT_NAME from '@salesforce/schema/Participant__c.Name';
 import PARTICIPANT_EMAIL from '@salesforce/schema/Participant__c.Email__c';
 
 const columns = [
-    { label: 'Event Name', fieldName: 'Name' },
+    { label: 'Event Name', fieldName: 'Event_Name',type:'url',
+        typeAttributes:{
+            label:{
+            fieldName:'Name'
+        }, 
+        target:'_blank'}, 
+},
     { label: 'Start Date', fieldName: 'Start_Date__c', sortable: "true", type: "date", typeAttributes: {
         hour: "2-digit",
         minute: "2-digit",
@@ -56,11 +65,25 @@ export default class ListOfActiveEvents extends NavigationMixin(LightningElement
     nameField = PARTICIPANT_NAME;
     emailField = PARTICIPANT_EMAIL;
 
+    renderedCallback(){ 
+        if(this.isCssLoaded) return
+        this.isCssLoaded = true
+        loadStyle(this, dt_colors).then(()=>{
+            console.log("Loaded Successfully")
+        }).catch(error=>{ 
+            console.error("Error in loading the colors")
+        })
+    }
+
     @wire(getAllEvents) 
-    events(result) {
-        if (result.data) {
-            this.data = result.data;
-        } else if (result.error) {
+    events({error,data}) {
+        if (data) {
+            data = JSON.parse(JSON.stringify(data));
+            data.forEach(element => {
+                element.Event_Name="https://playful-narwhal-5w7r6r-dev-ed.trailblaze.lightning.force.com/lightning/r/Event__c/"+element.Id+"/view"
+            });
+            this.data = data;
+        } else if (error) {
             this.data = undefined;
         }
     }
@@ -91,32 +114,33 @@ export default class ListOfActiveEvents extends NavigationMixin(LightningElement
         createRecord(recordInput)
             .then((participant) => {
                 this.isModalOpen = false;
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Success',
-                    message: 'Participant created and added to Event!',
-                    variant: 'success'
-                }));
+                window.location.reload();
+                //this.dispatchEvent(new ShowToastEvent({
+                    //title: 'Success',
+                    //message: 'Participant created and added to Event!',
+                    //variant: 'success'
+                //}));
 
-                const customEvent = new CustomEvent('recordcreated', {
-                    detail: { recordId: participant.id }
-                });
-                this.dispatchEvent(customEvent);
+                //const customEvent = new CustomEvent('recordcreated', {
+                    //detail: { recordId: participant.id }
+                //});
+                //this.dispatchEvent(customEvent);
 
-                this[NavigationMixin.Navigate]({
-                    type: 'standard__recordPage',
-                    attributes: {
-                        recordId: participant.id,
-                        objectApiName: PARTICIPANT_OBJECT.objectApiName,
-                        actionName: 'view'
-                    }
-                });
-            })
-            .catch(error => {
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Error creating record',
-                    message: error.body.message,
-                    variant: 'error'
-                }));
+                //this[NavigationMixin.Navigate]({
+                    //type: 'standard__recordPage',
+                    //attributes: {
+                        //recordId: participant.id,
+                        //objectApiName: PARTICIPANT_OBJECT.objectApiName,
+                        //actionName: 'view'
+                    //}
+                //});
+            //})
+            //.catch(error => {
+                //this.dispatchEvent(new ShowToastEvent({
+                    //title: 'Error creating record',
+                    //message: error.body.message,
+                   // variant: 'error'
+                //}));
             });
     }
 
