@@ -1,4 +1,3 @@
-
 public with sharing class EventController {
     
     @AuraEnabled(cacheable=true scope='global')
