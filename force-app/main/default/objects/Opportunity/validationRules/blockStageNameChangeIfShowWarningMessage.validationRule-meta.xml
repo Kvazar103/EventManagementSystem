@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>blockStageNameChangeIfShowWarningMessage</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ showWarningMessage__c  = true,
+ ISCHANGED( StageName ) 
+)</errorConditionFormula>
+    <errorMessage>You cannot edit stage while you have someone else&apos;s reserved/sold car</errorMessage>
+</ValidationRule>

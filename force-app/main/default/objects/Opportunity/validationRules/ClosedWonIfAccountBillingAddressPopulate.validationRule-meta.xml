@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ClosedWonIfAccountBillingAddressPopulate</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISPICKVAL( StageName , &quot;Closed Won&quot;)  &amp;&amp;
+OR(
+   ISBLANK(Account.BillingStreet),
+   ISBLANK(Account.BillingCity), 
+   ISBLANK(Account.BillingState),
+   ISBLANK(Account.BillingCountry),
+   ISBLANK(Account.BillingPostalCode)
+)</errorConditionFormula>
+    <errorMessage>Opportunity cannot be marked as Closed Won if your Account Billing Adrress is blank</errorMessage>
+</ValidationRule>
